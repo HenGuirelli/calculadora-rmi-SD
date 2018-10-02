@@ -2,18 +2,41 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class MensageiroImpl extends UnicastRemoteObject implements Mensageiro {
-	public MensageiroImpl() throws RemoteException {
-		super();
-		}
-	public void enviarMensagem(String msg) throws RemoteException {
-		// TODO Auto-generated method stub
-		System.out.println( msg );
-	}
-	@Override
-public String lerMensagem() throws RemoteException {
-		// TODO Auto-generated method stub
-		return "This is not a Hello World! message";
-		
-	}
+    public MensageiroImpl() throws RemoteException {
+        super();
+    }
+
+    @Override
+    public double somar(double[] valores) throws RemoteException {
+        double resp = 0;
+        for(double valor : valores)
+            resp += valor;
+        return resp;
+    }
+
+    @Override
+    public double subitrair(double[] valores) throws RemoteException {
+        double resp = 0;
+        for(double valor : valores)
+            resp -= valor;
+        return resp;
+    }
+
+    @Override
+    public double multiplicar(double[] valores) throws RemoteException {
+        double resp = 0;
+        for(double valor : valores)
+            resp *= valor;
+        return resp;
+    }
+
+    @Override
+    public double dividir(double[] valores) throws RemoteException {
+        double resp = 0;
+        for(double valor : valores)
+            resp /= valor;
+        return resp;
+    }
+	
 
 }
