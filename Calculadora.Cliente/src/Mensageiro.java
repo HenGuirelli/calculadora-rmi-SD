@@ -3,7 +3,8 @@ import java.rmi.RemoteException;
 
 
 public interface Mensageiro extends Remote {
-	public void enviarMensagem( String msg ) throws   
-	  RemoteException;
-	public String lerMensagem() throws RemoteException;
+    public double somar(double[] valores)       throws RemoteException;
+    public double subitrair(double[] valores)   throws RemoteException;
+    public double multiplicar(double[] valores) throws RemoteException;
+    public double dividir(double[] valores)     throws RemoteException;
 }
