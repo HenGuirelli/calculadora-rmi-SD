@@ -1,12 +1,15 @@
 package br.com.fatec.controller;
 
-public abstract class Compilador {
-    public static void compilar(String expressao){
+public class Compilador {
+    private Compilador(){
+        
+    }
+    
+    public static double[] compilar(String expressao){
         // Sinal matematico da expressao
         char sinal = getSinal(expressao);
         
-        double[] numeros = getNumeros(expressao, sinal);
-        
+        return getNumeros(expressao, sinal);        
     }
     
     private static double[] getNumeros(String expressao, char sinal){
