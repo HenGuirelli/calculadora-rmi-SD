@@ -9,15 +9,30 @@ public class Teste {
             assert(vet1[i] == vet2[i]);
         return true;
     }
+    
+    private static void testar(boolean assertion){
+        if (!assertion)
+            throw new TesteQuebradoException();
+    }
+    
     public static void testarCompilador(){
-        assert(isIgual(Compilador.compilar("1*3*4"), new double []{1, 3, 4})): "Teste quberado";
-        assert(isIgual(Compilador.compilar("5+2+4"), new double []{1, 3, 4})): "Teste quberado";
-        assert(isIgual(Compilador.compilar("1-3-4"), new double []{1, 3, 4})): "Teste quberado";
-        assert(isIgual(Compilador.compilar("1/3/4/.5"), new double []{1, 3, 4})): "Teste quberado";
-        assert(isIgual(Compilador.compilar(".1*3*4"), new double []{1, 3, 4})): "Teste quberado";
-        assert(isIgual(Compilador.compilar("-1*-3*4"), new double []{1, 3, 4})): "Teste quberado";
+        testar(isIgual(Compilador.compilar("1*3*4"), new double []{1, 3, 4}));
+        testar(isIgual(Compilador.compilar("5+2+4"), new double []{5, 2, 4}));
+        testar(isIgual(Compilador.compilar("1-3-4"), new double []{1, 3, 4}));
+        testar(isIgual(Compilador.compilar("1/3/4/.5"), new double []{1, 3, 4}));
+        testar(isIgual(Compilador.compilar(".1*3*4"), new double []{1, 3, 4}));
+        testar(isIgual(Compilador.compilar("-1*-3*4"), new double []{1, 3, 4}));
+    }
+    public static void testarSinal(){
+        testar(Compilador.getSinal("1*3*4")== '*');
+        testar(Compilador.getSinal("5+2+4") == '+');
+        testar(Compilador.getSinal("1-3-4") == '-');
+        testar(Compilador.getSinal("1/3/4/.5") == '/');
+        testar(Compilador.getSinal(".1*3*4") == '*');
+        testar(Compilador.getSinal("-1*-3*-4") == '*');
     }
     public static void main(String[] args){
         testarCompilador();
+        testarSinal();
     }
 }
