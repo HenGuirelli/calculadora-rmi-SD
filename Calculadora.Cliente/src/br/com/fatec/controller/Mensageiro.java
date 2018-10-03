@@ -1,3 +1,5 @@
+package br.com.fatec.controller;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
