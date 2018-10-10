@@ -8,8 +8,18 @@ public class Expressao {
     
     private ArrayList<Parte> expr = new ArrayList<>();
     
-    // numero em cachê
-    private double num;
+    // está na parte decimal
+    private boolean inDecimalPart = false;
+    private int concatDecimal;
+    
+    public boolean getInDecimalPart(){
+        return inDecimalPart;
+    }
+    
+    public void setInDecimalPart(boolean inDecimalPart){
+        concatDecimal = inDecimalPart ? 10 : 0;
+        this.inDecimalPart = inDecimalPart;
+    }
     
     private Parte getLast(){
         return expr.get(expr.size() - 1);
@@ -22,18 +32,26 @@ public class Expressao {
     public String getExpr(){
         String resp = "";
         for(Parte parte : expr){
-            resp += parte.getValue();
+            resp += parte.getValue() + " ";
         }
         return resp;
     }
     
     public void addNum(double num){
+        double novoNum = 0;
+        
         // caso vetor vazio
         if (expr.size() == 0){
-            Numerico numerico = new Numerico();
-            numerico.setType(Type.numerico);
-            numerico.setNum(num);
-            expr.add(numerico);
+            if (!inDecimalPart){
+                Numerico numerico = new Numerico();
+                numerico.setNum(num);
+                expr.add(numerico);
+                
+            }else {
+                Numerico numerico = new Numerico();
+                numerico.setNum(num / 10);
+                expr.add(numerico);
+            }            
         }else{
             if (getLast().getType() == Type.operador){
                 Numerico numerico = new Numerico();
@@ -44,8 +62,13 @@ public class Expressao {
             else if (getLast().getType() == Type.numerico){
                 // TODO: POR REFERENCIA?
                 Numerico numerico = (Numerico) getLast();
-                
-                double novoNum = (Double.parseDouble(numerico.getValue()) * 10) + num;
+                if (!inDecimalPart)
+                    novoNum = (Double.parseDouble(numerico.getValue()) * 10) + num;
+                else{
+                    // ciclo de 'concatenação' da parte decimal
+                    novoNum = (Double.parseDouble(numerico.getValue())) + (num / concatDecimal);
+                    concatDecimal *= 10;
+                }
                 numerico.setNum(novoNum);                
             }
         }
