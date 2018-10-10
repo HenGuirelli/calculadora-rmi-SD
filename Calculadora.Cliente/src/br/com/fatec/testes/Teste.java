@@ -7,7 +7,7 @@ public class Teste {
     
     public static void main(String[] args){
         //testar();
-        Expressao a = new Expressao();
+        Expressao a = Expressao.getInstance();
         a.addNum("1");
         a.addNum("2");
         a.addNum("3");
@@ -37,5 +37,25 @@ public class Teste {
         a.toggleSinal();
         a.addSymbol(Operador.DIV);
         System.out.println(a.getExpr());
+        
+        System.out.println("----------------------------------");
+        a.deleteAll();
+        a.addNum("1");
+        a.addNum("2");
+        a.addNum("3");
+        a.setInDecimalPart(true);
+        a.addNum("5");
+        a.addNum("5");
+        a.addNum("7");
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+
     }
 }

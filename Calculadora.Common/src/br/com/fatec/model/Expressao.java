@@ -6,11 +6,27 @@ import br.com.fatec.enuns.Type;
 
 public class Expressao {
     
-    private ArrayList<Parte> expr = new ArrayList<>();
+    private static Expressao instancia;
+    
+    private ArrayList<Parte> expr;
     
     // está na parte decimal
-    private boolean inDecimalPart = false;
+    private boolean inDecimalPart;
     private int concatDecimal;
+    
+    private Expressao(){
+        expr = new ArrayList<>();
+        inDecimalPart = false;
+    }
+    
+    public static Expressao getInstance(){
+        if (instancia == null){
+            instancia = new Expressao();
+            return instancia;
+        }else {
+            return instancia;
+        }
+    }
     
     public boolean getInDecimalPart(){
         return inDecimalPart;
@@ -81,6 +97,7 @@ public class Expressao {
     
     public void deleteAll(){
         expr.clear();
+        setInDecimalPart(false);
     }
     
     public void delete(){
@@ -93,9 +110,18 @@ public class Expressao {
             }else{
                 Numerico ultimo = (Numerico) getLast();
                 expr.remove(getLast());
-                // remove o ultimo caractere
-                String novoValor = ultimo.getValue().substring(0, ultimo.getValue().length() - 1);
-                ultimo.setNum(Double.parseDouble(novoValor));
+                String valor = ultimo.getValue();
+                //verifica se termina com .0
+                if (valor.split("\\.")[1].equals("0")){
+                    setInDecimalPart(false);
+                    System.out.println("decimal");
+                    valor = ((int) (ultimo.getNum()) / 10) + "";
+                }else{
+                    System.out.println("else");
+                    // remove o ultimo caractere
+                    valor = valor.substring(0, valor.length() - 1);
+                }
+                ultimo.setNum(Double.parseDouble(valor));
                 expr.add(ultimo);
             }            
         }            

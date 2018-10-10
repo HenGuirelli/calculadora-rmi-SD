@@ -6,6 +6,8 @@
 package br.com.fatec.view;
 
 import br.com.fatec.controller.MensageiroClient;
+import br.com.fatec.enuns.Operador;
+import br.com.fatec.model.Expressao;
 import java.rmi.RemoteException;
 import javax.swing.JOptionPane;
 /**
@@ -14,6 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class Calculadora extends javax.swing.JFrame {
     private MensageiroClient client;
+    private Expressao expressao;
 
     /**
      * Creates new form Calculadora
@@ -22,8 +25,13 @@ public class Calculadora extends javax.swing.JFrame {
         initComponents();
         client = new MensageiroClient();
         client.conectar();
+        expressao = Expressao.getInstance();
     }
-
+    
+    private void updateVisor(){
+        lblVisor.setText(expressao.getExpr());        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,7 +56,7 @@ public class Calculadora extends javax.swing.JFrame {
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
+        btnInverteSinal = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
         jButton17 = new javax.swing.JButton();
         jButton18 = new javax.swing.JButton();
@@ -151,7 +159,12 @@ public class Calculadora extends javax.swing.JFrame {
             }
         });
 
-        jButton15.setText("+/-");
+        btnInverteSinal.setText("+/-");
+        btnInverteSinal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInverteSinalActionPerformed(evt);
+            }
+        });
 
         jButton16.setText("-");
         jButton16.addActionListener(new java.awt.event.ActionListener() {
@@ -227,7 +240,7 @@ public class Calculadora extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnInverteSinal, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButton16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -269,7 +282,7 @@ public class Calculadora extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnInverteSinal, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton19, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -287,36 +300,47 @@ public class Calculadora extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNumero(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNumero
-        lblVisor.setText(lblVisor.getText() + ((javax.swing.JButton)evt.getSource()).getText());
+        String numero = ((javax.swing.JButton)evt.getSource()).getText();
+        expressao.addNum(numero);
+        updateVisor();
     }//GEN-LAST:event_btnNumero
 
     private void btnSinal(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSinal
-        lblVisor.setText(lblVisor.getText() + ((javax.swing.JButton)evt.getSource()).getText());
+        String sinal = ((javax.swing.JButton)evt.getSource()).getText();
+        if (sinal.equals("+"))
+            expressao.addSymbol(Operador.ADD);
+        if (sinal.equals("-"))
+            expressao.addSymbol(Operador.SUB);
+        if (sinal.equals("/"))
+            expressao.addSymbol(Operador.DIV);
+        if (sinal.equals("*"))
+            expressao.addSymbol(Operador.MULT);
+        updateVisor();
     }//GEN-LAST:event_btnSinal
 
     private void btnApagarTudo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarTudo
-        lblVisor.setText("");
+        expressao.deleteAll();
+        updateVisor();
     }//GEN-LAST:event_btnApagarTudo
 
     private void btnApagar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagar
-        if (lblVisor.getText().length() >= 1)
-            //retira ultimo numero
-            lblVisor.setText(lblVisor.getText().substring(0, lblVisor.getText().length() - 1));
+       expressao.delete();
+       updateVisor();
     }//GEN-LAST:event_btnApagar
 
     private void btnPonto(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonto
-        lblVisor.setText(lblVisor.getText() + ((javax.swing.JButton)evt.getSource()).getText());
+        expressao.setInDecimalPart(true);
+        updateVisor();
     }//GEN-LAST:event_btnPonto
 
     private void btnCalcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcular
-        String expressao = lblVisor.getText();
-        try {
-            lblVisor.setText(lblVisor.getText() + " = " + client.calcular(expressao) + "");
-        } catch (RemoteException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao calcular");
-        }
         
     }//GEN-LAST:event_btnCalcular
+
+    private void btnInverteSinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInverteSinalActionPerformed
+        expressao.toggleSinal();
+        updateVisor();
+    }//GEN-LAST:event_btnInverteSinalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -354,13 +378,13 @@ public class Calculadora extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnInverteSinal;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
