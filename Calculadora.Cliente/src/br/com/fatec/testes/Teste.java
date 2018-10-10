@@ -1,6 +1,7 @@
 package br.com.fatec.testes;
 
 import br.com.fatec.controller.*;
+import br.com.fatec.enuns.Operador;
 import br.com.fatec.model.Expressao;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -46,6 +47,14 @@ public class Teste {
     public static void main(String[] args){
         //testar();
         Expressao a = new Expressao();
-        System.out.println(a.addNum(0));
+        a.addNum("1");
+        a.addNum("2");
+        a.addNum("3");
+        a.addSymbol(Operador.SUB);
+        a.addSymbol(Operador.SUB);
+        a.addSymbol(Operador.ADD);
+        a.addSymbol(Operador.DIV);
+        a.addNum("5");
+        System.out.println(a.getExpr());
     }
 }

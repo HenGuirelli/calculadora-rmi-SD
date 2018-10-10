@@ -6,7 +6,7 @@ import br.com.fatec.enuns.Type;
 
 public class Expressao {
     
-    private ArrayList<Parte> expr;
+    private ArrayList<Parte> expr = new ArrayList<>();
     
     // numero em cachê
     private double num;
@@ -41,13 +41,19 @@ public class Expressao {
                 numerico.setNum(num);
                 expr.add(numerico);
             }
-            if (getLast().getType() == Type.numerico){
+            else if (getLast().getType() == Type.numerico){
                 // TODO: POR REFERENCIA?
                 Numerico numerico = (Numerico) getLast();
-                double novoNum = Double.parseDouble(numerico.getValue() + num);
+                
+                double novoNum = (Double.parseDouble(numerico.getValue()) * 10) + num;
                 numerico.setNum(novoNum);                
             }
         }
+        System.out.println("adiconou " + num);
+    }
+    
+    public void addNum(String num){
+        addNum(Double.parseDouble(num));
     }
     
     public void deleteAll(){
@@ -69,11 +75,13 @@ public class Expressao {
                 ultimo.setNum(Double.parseDouble(novoValor));
                 expr.add(ultimo);
             }            
-        }
-            
+        }            
     }
     
     public void addSymbol(Operador symbol){
+        if (getLast().getType() == Type.operador)
+            return;
+        
         br.com.fatec.model.Operador operador = new br.com.fatec.model.Operador();
         operador.setOperador(symbol);
         expr.add(operador);
