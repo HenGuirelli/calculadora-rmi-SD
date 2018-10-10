@@ -60,13 +60,13 @@ public class Expressao {
                 expr.add(numerico);
             }
             else if (getLast().getType() == Type.numerico){
-                // TODO: POR REFERENCIA?
                 Numerico numerico = (Numerico) getLast();
                 if (!inDecimalPart)
                     novoNum = (Double.parseDouble(numerico.getValue()) * 10) + num;
                 else{
                     // ciclo de 'concatenação' da parte decimal
-                    novoNum = (Double.parseDouble(numerico.getValue())) + (num / concatDecimal);
+                    int sinal = numerico.getNum() < 0 ? -1 : 1;
+                    novoNum = (numerico.getNum()) + ((num / concatDecimal) * sinal);
                     concatDecimal *= 10;
                 }
                 numerico.setNum(novoNum);                
@@ -108,5 +108,13 @@ public class Expressao {
         br.com.fatec.model.Operador operador = new br.com.fatec.model.Operador();
         operador.setOperador(symbol);
         expr.add(operador);
+    }
+    
+    public void toggleSinal(){
+        if (getLast().getType() == Type.numerico){
+            Numerico ultimo = (Numerico) getLast();
+            double valor = ultimo.getNum();
+            ultimo.setNum(-valor);
+        }
     }
 }

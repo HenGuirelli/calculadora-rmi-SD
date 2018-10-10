@@ -25,12 +25,17 @@ public class Teste {
         a.setInDecimalPart(true);
         a.addNum("2");
         a.addNum("1");
-        a.addNum("1");
-        a.addNum("1");
+        a.addNum("1");        
+        a.toggleSinal();
+        a.addNum("1");        
+        a.toggleSinal();
         a.addNum("1");
         a.addSymbol(Operador.ADD);
         a.setInDecimalPart(false);
         a.addNum("5");
+        a.toggleSinal();
+        a.toggleSinal();
+        a.addSymbol(Operador.DIV);
         System.out.println(a.getExpr());
     }
 }
