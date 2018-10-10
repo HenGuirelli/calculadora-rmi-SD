@@ -10,15 +10,9 @@ public class Compilador {
         char sinal = getSinal(expressao);        
         return _getNumeros(expressao, sinal);        
     }
-    private static void print(String [] a){
-        System.out.println("numeros");
-        for(String num : a)
-            System.out.print(num + " ");
-    }
+    
     private static double[] _getNumeros(String expressao, char sinal){
-        System.out.println(expressao.replace(sinal + "", "#"));
         String[] strNumeros = expressao.replace(sinal + "", "#").split("#");
-        print(strNumeros);
         double[] numeros = new double[strNumeros.length];
         
         for (int i = 0; i < strNumeros.length; i ++)

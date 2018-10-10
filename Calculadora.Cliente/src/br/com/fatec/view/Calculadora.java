@@ -6,22 +6,22 @@
 package br.com.fatec.view;
 
 import br.com.fatec.controller.MensageiroClient;
-import br.com.fatec.controller.Compilador;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 /**
  *
  * @author henrique1
  */
 public class Calculadora extends javax.swing.JFrame {
+    private MensageiroClient client;
 
     /**
      * Creates new form Calculadora
      */
     public Calculadora() {
         initComponents();
+        client = new MensageiroClient();
+        client.conectar();
     }
 
     /**
@@ -295,12 +295,13 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSinal
 
     private void btnApagarTudo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagarTudo
-        lblVisor.setText("");       
+        lblVisor.setText("");
     }//GEN-LAST:event_btnApagarTudo
 
     private void btnApagar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApagar
         if (lblVisor.getText().length() >= 1)
-        lblVisor.setText(lblVisor.getText().substring(0, lblVisor.getText().length() - 1));
+            //retira ultimo numero
+            lblVisor.setText(lblVisor.getText().substring(0, lblVisor.getText().length() - 1));
     }//GEN-LAST:event_btnApagar
 
     private void btnPonto(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonto
@@ -310,7 +311,7 @@ public class Calculadora extends javax.swing.JFrame {
     private void btnCalcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcular
         String expressao = lblVisor.getText();
         try {
-            lblVisor.setText(MensageiroClient.calcular(expressao) + "");
+            lblVisor.setText(lblVisor.getText() + " = " + client.calcular(expressao) + "");
         } catch (RemoteException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao calcular");
         }

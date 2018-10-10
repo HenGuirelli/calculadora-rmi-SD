@@ -1,42 +1,51 @@
 package br.com.fatec.testes;
 
-import br.com.fatec.controller.Compilador;
+import br.com.fatec.controller.*;
+import br.com.fatec.model.Expressao;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class Teste {
-    private static boolean isIgual(double[] vet1, double[] vet2){
-        testar(vet1.length == vet2.length);
-        for (int i = 0; i < vet1.length; i++)
-            if(vet1[i] != vet2[i]){
-                throw new TesteQuebradoException("recebido: " + vet1[i] + " esperado: " + vet2[i]);
+    public static void testar(){
+        try {
+            MensageiroClient m = new MensageiroClient();
+            m.conectar();
+            
+            String[] expressoes = new String[] 
+            {
+                "1*3*4", 
+                "5+2+4", 
+                "1-3-4", 
+                "69/3/.5/2", 
+                ".1*3*4", 
+                "-1*-3*-4"
+            };
+            
+            for (String expressao : expressoes){
+                char sinal = Compilador.getSinal(expressao);
+                double[] numeros = Compilador.getNumeros(expressao);
+                System.out.println("---------------------------------------------");
+            
+                System.out.println("sinal: " + sinal);
+                System.out.println("numeros:");
+                for (double num  : numeros)
+                    System.out.print(num + "  ");
+                System.out.println("");
+                System.out.println("resultado: ");
+
+                System.out.println(m.calcular(expressao));
             }
-        return true;
+        } catch (RemoteException ex) {
+            Logger.getLogger(MensageiroClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    private static void testar(boolean assertion){
-        if (!assertion)
-            throw new TesteQuebradoException();
-    }
-    
-    public static void testarCompilador(){
-        testar(isIgual(Compilador.getNumeros("1*3*4"), new double []{1, 3, 4}));
-        testar(isIgual(Compilador.getNumeros("5+2+4"), new double []{5, 2, 4}));
-        testar(isIgual(Compilador.getNumeros("1-3-4"), new double []{1, 3, 4}));
-        testar(isIgual(Compilador.getNumeros("1/3/4/.5"), new double []{1, 3, 4, .5}));
-        testar(isIgual(Compilador.getNumeros(".1*3*4"), new double []{.1, 3, 4}));
-        testar(isIgual(Compilador.getNumeros("-1*-3*4"), new double []{-1, -3, 4}));
-    }
-    
-    public static void testarSinal(){
-        testar(Compilador.getSinal("1*3*4")== '*');
-        testar(Compilador.getSinal("5+2+4") == '+');
-        testar(Compilador.getSinal("1-3-4") == '-');
-        testar(Compilador.getSinal("1/3/4/.5") == '/');
-        testar(Compilador.getSinal(".1*3*4") == '*');
-        testar(Compilador.getSinal("-1*-3*-4") == '*');
-    }
     
     public static void main(String[] args){
-        testarCompilador();
-        testarSinal();
+        //testar();
+        Expressao a = new Expressao();
+        System.out.println(a.addNum(0));
     }
 }

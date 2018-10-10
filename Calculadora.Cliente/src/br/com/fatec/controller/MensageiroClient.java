@@ -6,31 +6,34 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-
 public class MensageiroClient {
-
-    public static double calcular(String expressao) throws RemoteException {
-        Mensageiro m = null;
-        try {
+    private Mensageiro mensageiro;
+    
+    public void conectar(){
+         try {
             //ip
             LocateRegistry.getRegistry("localhost");
-            m = (Mensageiro) Naming.lookup("rmi://localhost:9999/MensageiroService" );
+            mensageiro = (Mensageiro) Naming.lookup("rmi://localhost:8080/MensageiroService" );       
         } catch (MalformedURLException | RemoteException | NotBoundException e) {
             e.printStackTrace();
         }
+    }    
+    
+    public double calcular(String expressao) throws RemoteException {
+
         char sinal = Compilador.getSinal(expressao);
-        double[] numeros = Compilador.getNumeros(expressao);
+        double[] numeros = Compilador.getNumeros(expressao);        
         
         if (sinal == '+')
-            return m.somar(numeros);
+            return mensageiro.somar(numeros);
         if (sinal == '-')
-            return m.subitrair(numeros);
+            return mensageiro.subitrair(numeros);
         if (sinal == '*')
-            return m.multiplicar(numeros);
+            return mensageiro.multiplicar(numeros);
         if (sinal == '/')
-            return m.dividir(numeros);
-        
-        throw new RuntimeException("erro ao calcular");
+            return mensageiro.dividir(numeros);
+
+        return 0;
     }
 
 }

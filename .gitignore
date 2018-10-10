@@ -25,3 +25,5 @@ hs_err_pid*
 /Calculadora.Servidor/nbproject/private/
 /Calculadora.Servidor/build/
 /Calculadora.Cliente/build/
+/Calculadora.Common/nbproject/private/
+/Calculadora.Common/build/
