@@ -12,7 +12,6 @@ public class Expressao {
     
     // está na parte decimal
     private boolean inDecimalPart;
-    private int concatDecimal;
     
     private Expressao(){
         expr = new ArrayList<>();
@@ -33,7 +32,6 @@ public class Expressao {
     }
     
     public void setInDecimalPart(boolean inDecimalPart){
-        concatDecimal = inDecimalPart ? 10 : 0;
         this.inDecimalPart = inDecimalPart;
     }
     
@@ -53,46 +51,45 @@ public class Expressao {
         return resp;
     }
     
-    public void addNum(double num){
+    public void addNum(long num){
         double novoNum = 0;
         
         // caso vetor vazio
         if (expr.size() == 0){
             if (!inDecimalPart){
                 Numerico numerico = new Numerico();
-                numerico.setNum(num);
+                numerico.setMilhar(num);
                 expr.add(numerico);
                 
             }else {
                 Numerico numerico = new Numerico();
-                numerico.setNum(num / 10);
+                numerico.setDecimal(num);
                 expr.add(numerico);
             }            
         }else{
+            // com numero no visor
             if (getLast().getType() == Type.operador){
                 Numerico numerico = new Numerico();
                 numerico.setType(Type.numerico);
-                numerico.setNum(num);
+                numerico.setMilhar(num);
                 expr.add(numerico);
             }
             else if (getLast().getType() == Type.numerico){
                 Numerico numerico = (Numerico) getLast();
                 if (!inDecimalPart)
-                    novoNum = (Double.parseDouble(numerico.getValue()) * 10) + num;
+                    // fluxo de 'concatenação' da parte milhar
+                    numerico.setMilhar(numerico.getMilhar() * 10 + num);
                 else{
-                    // ciclo de 'concatenação' da parte decimal
-                    int sinal = numerico.getNum() < 0 ? -1 : 1;
-                    novoNum = (numerico.getNum()) + ((num / concatDecimal) * sinal);
-                    concatDecimal *= 10;
-                }
-                numerico.setNum(novoNum);                
+                    // fluxo de 'concatenação' da parte decimal
+                    numerico.setDecimal(numerico.getDecimal() * 10 + num);      
+                }          
             }
         }
         System.out.println("adiconou " + num);
     }
     
     public void addNum(String num){
-        addNum(Double.parseDouble(num));
+        addNum(Long.parseLong(num));
     }
     
     public void deleteAll(){
@@ -105,25 +102,14 @@ public class Expressao {
             expr.remove(getLast());
         else{
             //remove o ultimo numero
-            if (getLast().getValue().length() == 1 || getLast().getValue().length() == 0){
-                expr.remove(getLast());
+            Numerico numero = (Numerico) getLast();
+            if (numero.getDecimal() != 0){
+                double novoDecimal = numero.getDecimal();
+                numero.setDecimal((int)novoDecimal / 10);
             }else{
-                Numerico ultimo = (Numerico) getLast();
-                expr.remove(getLast());
-                String valor = ultimo.getValue();
-                //verifica se termina com .0
-                if (valor.split("\\.")[1].equals("0")){
-                    setInDecimalPart(false);
-                    System.out.println("decimal");
-                    valor = ((int) (ultimo.getNum()) / 10) + "";
-                }else{
-                    System.out.println("else");
-                    // remove o ultimo caractere
-                    valor = valor.substring(0, valor.length() - 1);
-                }
-                ultimo.setNum(Double.parseDouble(valor));
-                expr.add(ultimo);
-            }            
+                double novoMilhar = numero.getMilhar();
+                numero.setMilhar((int)novoMilhar / 10);
+            }
         }            
     }
     
@@ -139,8 +125,7 @@ public class Expressao {
     public void toggleSinal(){
         if (getLast().getType() == Type.numerico){
             Numerico ultimo = (Numerico) getLast();
-            double valor = ultimo.getNum();
-            ultimo.setNum(-valor);
+            ultimo.toggleSinal();
         }
     }
 }
