@@ -3,7 +3,7 @@ package br.com.fatec.model;
 import br.com.fatec.enuns.Type;
 
 
-public class Operador extends Parte{
+public class Operador extends Parte  implements java.io.Serializable{
     private br.com.fatec.enuns.Operador operador;
 
     public Operador(){

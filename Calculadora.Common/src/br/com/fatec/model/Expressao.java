@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import br.com.fatec.enuns.Operador;
 import br.com.fatec.enuns.Type;
 
-public class Expressao {
+public class Expressao implements java.io.Serializable, java.lang.Cloneable {
     
     private static Expressao instancia;
     
@@ -133,4 +133,8 @@ public class Expressao {
             ultimo.toggleSinal();
         }
     }
+    
+    public Object clone()throws CloneNotSupportedException{  
+        return super.clone();  
+    }  
 }

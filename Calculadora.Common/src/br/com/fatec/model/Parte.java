@@ -2,7 +2,7 @@ package br.com.fatec.model;
 
 import br.com.fatec.enuns.Type;
 
-public abstract class Parte {
+public abstract class Parte implements java.io.Serializable {
     private Type type;
 
     public abstract String getValue();

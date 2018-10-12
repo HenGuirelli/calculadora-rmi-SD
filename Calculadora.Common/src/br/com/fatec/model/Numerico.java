@@ -4,7 +4,7 @@ import br.com.fatec.enuns.Sinal;
 import br.com.fatec.enuns.Type;
 import java.util.Stack;
 
-public class Numerico extends Parte{
+public class Numerico extends Parte implements java.io.Serializable{
     private Stack<Character> num;
     private Sinal sinal;
     public static char decimalSeparator;
