@@ -1,5 +1,7 @@
 package br.com.fatec.controller;
 
+import br.com.fatec.enuns.Operador;
+import br.com.fatec.model.Expressao;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -19,19 +21,18 @@ public class MensageiroClient {
         }
     }    
     
-    public double calcular(String expressao) throws RemoteException {
+    public double calcular(Expressao expressao) throws RemoteException {
 
-        char sinal = Compilador.getSinal(expressao);
-        double[] numeros = Compilador.getNumeros(expressao);        
+        Operador sinal = expressao.getOperador().getOperador();
         
-        if (sinal == '+')
-            return mensageiro.somar(numeros);
-        if (sinal == '-')
-            return mensageiro.subitrair(numeros);
-        if (sinal == '*')
-            return mensageiro.multiplicar(numeros);
-        if (sinal == '/')
-            return mensageiro.dividir(numeros);
+        if (sinal == Operador.ADD)
+            return mensageiro.somar(expressao);
+        if (sinal == Operador.SUB)
+            return mensageiro.subitrair(expressao);
+        if (sinal == Operador.MULT)
+            return mensageiro.multiplicar(expressao);
+        if (sinal == Operador.DIV)
+            return mensageiro.dividir(expressao);
 
         return 0;
     }

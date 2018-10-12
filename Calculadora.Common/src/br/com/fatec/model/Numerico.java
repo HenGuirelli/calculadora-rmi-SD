@@ -2,87 +2,62 @@ package br.com.fatec.model;
 
 import br.com.fatec.enuns.Sinal;
 import br.com.fatec.enuns.Type;
+import java.util.Stack;
 
 public class Numerico extends Parte{
-    private String decimal; // precisa ser string pra ter 0 a esquerda
-    private long milhar;
+    private Stack<Character> num;
     private Sinal sinal;
-    
-    private boolean inDecimalPart;
-
-    public boolean isInDecimalPart() {
-        return inDecimalPart;
-    }
-
-    public void setInDecimalPart(boolean inDecimalPart) {
-        if (inDecimalPart)
-            setDecimal(".");
-        this.inDecimalPart = inDecimalPart;
-    }
-    
-    public boolean deleteLast(){
-        // está na parte decimal
-        if (inDecimalPart){
-            decimal = decimal.substring(0, decimal.length() - 1);
-            if (decimal.length() == 0)
-                inDecimalPart = false;
-        }else{
-            setMilhar(getMilhar() / 10);
-        }
-        return inDecimalPart;
-    }
+    public static char decimalSeparator;
     
     public Numerico(){
-        this.setType(Type.numerico);
+        num = new Stack<>();
+        setType(Type.numerico);
+        decimalSeparator = '.';
         sinal = Sinal.POSITIVE;
     }
-
-    public String getDecimal() {
-        return decimal == null ? "" : decimal;
-    }
-
-    public void setDecimal(String decimal) {
-        inDecimalPart = true;
-        if (decimal.length() > 0 && decimal.charAt(0) != '.')
-            decimal = "." + decimal;            
-        this.decimal = decimal;        
-    }
-
-    public long getMilhar() {
-        return milhar;
-    }
-
-    public void setMilhar(long milher) {
-        this.milhar = milher;
+    
+    public void addNum(Character num){
+        if (isNumeric(num))
+            this.num.add(num);
+        else{
+            if (num == decimalSeparator){
+                boolean achouPonto = false;
+                for (char item : this.num){
+                    if (item == decimalSeparator)
+                        achouPonto = true;
+                }
+                if (!achouPonto)
+                    this.num.add(num);
+            }
+        }
     }
     
-    public double getNum(){
-        return Double.parseDouble(getValue());
+    public void removeLast(){
+        num.pop();
     }
     
-    public void toggleSinal(){
-        if (sinal == Sinal.POSITIVE)
+    public Sinal toggleSinal(){
+        if (this.sinal == Sinal.POSITIVE)
             sinal = Sinal.NEGATIVE;
         else
             sinal = Sinal.POSITIVE;
-    }
-    
-    public Sinal getSinal() {
         return sinal;
     }
-
-    public void setSinal(Sinal sinal) {
-        this.sinal = sinal;
+    
+    private String convertToString(){
+        String resp = "";
+        for (Character item : num){
+            resp += item;
+        }
+        return resp;
     }
     
     @Override
     public String getValue() {
-        String resp = "";
-        if (inDecimalPart)
-            resp = milhar + decimal;
-        else
-            resp = Long.toString(milhar);
-        
-        return sinal == Sinal.NEGATIVE ? "-" + resp : resp;
-    }    
+        return sinal == Sinal.NEGATIVE ? "-" + convertToString() : convertToString();
+    }
+    
+    private static boolean isNumeric(char str){
+        return str >= 48 && str <= 57;
+    }
 }

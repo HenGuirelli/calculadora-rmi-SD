@@ -1,5 +1,9 @@
 package br.com.fatec.controller;
 
+import br.com.fatec.enuns.Type;
+import br.com.fatec.model.Expressao;
+import br.com.fatec.model.Numerico;
+import br.com.fatec.model.Parte;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -9,40 +13,44 @@ public class MensageiroImpl extends UnicastRemoteObject implements Mensageiro {
     }
 
     @Override
-    public double somar(double[] valores) throws RemoteException {
+    public double somar(Expressao expressao) throws RemoteException {
         double resp = 0;
-        for(double valor : valores)
-            resp += valor;
+        for (Parte item : expressao.getModel()){
+            if (item.getType() == Type.numerico)
+                resp += Double.parseDouble(((Numerico) item).getValue());
+        }
         return resp;
     }
 
     @Override
-    public double subitrair(double[] valores) throws RemoteException {
+    public double subitrair(Expressao expressao) throws RemoteException {
         double resp = 0;
-        for(double valor : valores)
-            resp -= valor;
+        for (Parte item : expressao.getModel()){
+            if (item.getType() == Type.numerico)
+                resp -= Double.parseDouble(((Numerico) item).getValue());
+        }
         return resp;
     }
 
     @Override
-    public double multiplicar(double[] valores) throws RemoteException {
-        double resp = 1;
-        for(double valor : valores)
-            resp *= valor;
+    public double multiplicar(Expressao expressao) throws RemoteException {
+        double resp = 0;
+        for (Parte item : expressao.getModel()){
+            if (item.getType() == Type.numerico)
+                resp *= Double.parseDouble(((Numerico) item).getValue());
+        }
         return resp;
     }
 
     @Override
-    public double dividir(double[] valores) throws RemoteException {
-        double resp = 1;
-        
-        for(int i = 0; i < valores.length; i++)
-            if (i == 0)
-                resp = valores[i];
-            else
-                resp /= valores[i];
+    public double dividir(Expressao expressao) throws RemoteException {
+        double resp = 0;
+        for (Parte item : expressao.getModel()){
+            if (item.getType() == Type.numerico)
+                resp /= Double.parseDouble(((Numerico) item).getValue());
+        }
         return resp;
     }
-	
 
+   
 }

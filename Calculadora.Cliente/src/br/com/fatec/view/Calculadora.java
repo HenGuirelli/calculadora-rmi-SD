@@ -8,8 +8,6 @@ package br.com.fatec.view;
 import br.com.fatec.controller.MensageiroClient;
 import br.com.fatec.enuns.Operador;
 import br.com.fatec.model.Expressao;
-import java.rmi.RemoteException;
-import javax.swing.JOptionPane;
 /**
  *
  * @author henrique1
@@ -329,7 +327,7 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnApagar
 
     private void btnPonto(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPonto
-        expressao.setInDecimalPart(true);
+        expressao.addNum(((javax.swing.JButton)evt.getSource()).getText());
         updateVisor();
     }//GEN-LAST:event_btnPonto
 
