@@ -32,11 +32,29 @@ public class Expressao {
     }
     
     public void setInDecimalPart(boolean inDecimalPart){
+        if (inDecimalPart){
+            // clicou em um ponto sem nenhum numero
+            if (getLast() == null || getLast().getType() == Type.operador){
+                Numerico numerico = new Numerico();
+                numerico.setInDecimalPart(true);
+                expr.add(numerico);
+            } 
+            // clicou no ponto com numero
+            else{
+                Numerico numerico = (Numerico) getLast();
+                // verifica se clicou no ponto já na parte decimal
+                if (!numerico.isInDecimalPart()){
+                    numerico.setInDecimalPart(inDecimalPart);
+                }
+            }
+        }
         this.inDecimalPart = inDecimalPart;
     }
     
     private Parte getLast(){
-        return expr.get(expr.size() - 1);
+        if (!expr.isEmpty())
+            return expr.get(expr.size() - 1);
+        return null;
     }
     
     private void addParte(Parte parte){
@@ -63,7 +81,7 @@ public class Expressao {
                 
             }else {
                 Numerico numerico = new Numerico();
-                numerico.setDecimal(num);
+                numerico.setDecimal(Long.toString(num));
                 expr.add(numerico);
             }            
         }else{
@@ -81,7 +99,7 @@ public class Expressao {
                     numerico.setMilhar(numerico.getMilhar() * 10 + num);
                 else{
                     // fluxo de 'concatenação' da parte decimal
-                    numerico.setDecimal(numerico.getDecimal() * 10 + num);      
+                    numerico.setDecimal(numerico.getDecimal() + num);      
                 }          
             }
         }
@@ -98,19 +116,15 @@ public class Expressao {
     }
     
     public void delete(){
-        if (getLast().getType() == Type.operador)
+        if (getLast().getType() == Type.operador){
             expr.remove(getLast());
-        else{
+            // removeu operador então o anterior é um numerico
+            setInDecimalPart(((Numerico)getLast()).isInDecimalPart());
+        }else{
             //remove o ultimo numero
             Numerico numero = (Numerico) getLast();
-            if (numero.getDecimal() != 0){
-                double novoDecimal = numero.getDecimal();
-                numero.setDecimal((int)novoDecimal / 10);
-            }else{
-                double novoMilhar = numero.getMilhar();
-                numero.setMilhar((int)novoMilhar / 10);
-            }
-        }            
+            setInDecimalPart(numero.deleteLast());            
+        }
     }
     
     public void addSymbol(Operador symbol){
@@ -120,6 +134,7 @@ public class Expressao {
         br.com.fatec.model.Operador operador = new br.com.fatec.model.Operador();
         operador.setOperador(symbol);
         expr.add(operador);
+        setInDecimalPart(false);
     }
     
     public void toggleSinal(){

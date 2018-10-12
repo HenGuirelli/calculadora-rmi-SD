@@ -313,7 +313,7 @@ public class Calculadora extends javax.swing.JFrame {
             expressao.addSymbol(Operador.SUB);
         if (sinal.equals("/"))
             expressao.addSymbol(Operador.DIV);
-        if (sinal.equals("*"))
+        if (sinal.equals("x"))
             expressao.addSymbol(Operador.MULT);
         updateVisor();
     }//GEN-LAST:event_btnSinal

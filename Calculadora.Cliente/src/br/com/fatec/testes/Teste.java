@@ -64,8 +64,8 @@ public class Teste {
         numero.setMilhar(numero.getMilhar() * 10 + 2);
         numero.setMilhar(numero.getMilhar() * 10 + 3);
         System.out.println(numero.getValue() + " == 123");
-        numero.setDecimal(1);
-        numero.setDecimal(numero.getDecimal() *10 + 2);
+        numero.setDecimal("1");
+        numero.setDecimal(numero.getDecimal() + 2);
         System.out.println(numero.getValue() + " == 123.12");
         System.out.println("----------------------------------");
         
@@ -75,11 +75,40 @@ public class Teste {
         a.addNum("3");
         System.out.println(a.getExpr());
         a.setInDecimalPart(true);
+        a.addNum("0");
         a.addNum("1");
+        a.addNum("2");
+        a.addNum("3");
+        a.addNum("4");
         System.out.println(a.getExpr());
         a.delete();
         System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        System.out.println(a.getExpr());
+        a.delete();
+        
+        System.out.println("----------------------------------");
+        a.deleteAll();
+        a.addNum("1");
+        a.setInDecimalPart(true);
+        a.addNum("2");
         a.addNum("3");
+        a.delete();
+        a.delete();
+        a.delete();
+        System.out.println(a.getInDecimalPart());
         System.out.println(a.getExpr());
         
     }
