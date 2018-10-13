@@ -326,8 +326,14 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPonto
 
     private void btnCalcular(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcular
+
         if (lblVisor.getText().length() == 0)
             return;
+        
+        if (expressao.getModel().size() == 1){
+            lblVisor.setText(lblVisor.getText());
+            return;
+        }
         
         try {
             lblAntigaExpressao.setText(lblVisor.getText());
