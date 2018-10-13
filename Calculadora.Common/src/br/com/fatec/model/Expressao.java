@@ -68,9 +68,11 @@ public class Expressao implements java.io.Serializable, java.lang.Cloneable {
         }
     }
     
-    public void addNum(String num){
-        addNum(num.charAt(0));
-    }
+    public void addNum(String nums){
+        for (char num : nums.toCharArray()){
+            addNum(num);
+        }
+    }    
     
     public void deleteAll(){
         expr.clear();

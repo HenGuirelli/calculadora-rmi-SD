@@ -28,9 +28,6 @@ public class MensageiroClient {
 
         try {
             Operador sinal = expressao.getOperador().getOperador();
-            for(Parte item : expressao.getModel()){
-                System.out.println(item.getType());
-            }
             if (sinal == Operador.ADD)
                 return mensageiro.somar((Expressao)expressao.clone());
             if (sinal == Operador.SUB)

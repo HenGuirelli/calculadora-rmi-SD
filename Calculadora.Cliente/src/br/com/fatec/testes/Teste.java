@@ -24,6 +24,5 @@ public class Teste {
         a.toggleSinal();
         
         System.out.println(a.getExpr());
-        
     }
 }
