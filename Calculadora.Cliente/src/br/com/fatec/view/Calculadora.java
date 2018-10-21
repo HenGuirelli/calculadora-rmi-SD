@@ -345,8 +345,11 @@ public class Calculadora extends javax.swing.JFrame {
                 expressao.toggleSinal();
             updateVisor();
         } catch (RemoteException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao calcular ");
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Erro ao calcular");
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Erro de sintaxe");
+            expressao.deleteAll();
+            updateVisor();          
         }
         
     }//GEN-LAST:event_btnCalcular
